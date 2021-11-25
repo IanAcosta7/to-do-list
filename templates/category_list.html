@@ -1,0 +1,22 @@
+{% extends 'dashboard.html' %}
+
+{% block 'category_list' %}
+    {% for category in object_list %}
+        <div>
+            <h3>{{ category.name }}</h3>
+            {% for task in tasks %}
+                {% if task.category.id == category.id %}
+                    <article>
+                        <h4>{{ task.name }}</h4>
+                        <span>{{ task.state.name }}</span>
+                        <button><a href="/task/{{ task.id }}/">Editar</a></button>
+                    </article>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% empty %}
+        No hay categorías cargadas aún.
+    {% endfor %}
+
+
+{% endblock %}

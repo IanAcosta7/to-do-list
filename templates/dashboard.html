@@ -1,0 +1,9 @@
+{% extends 'index.html' %}
+
+{% block 'body' %}
+    <h2>Dashboard</h2>
+    {% block 'category_list' %}
+    {% endblock %}
+    <button><a href="/new_task/">Nueva Tarea</a></button>
+    <button><a href="/new_category/">Nueva Categoría</a></button>
+{% endblock %}

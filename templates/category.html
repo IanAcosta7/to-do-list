@@ -1,0 +1,9 @@
+{% extends 'index.html' %}
+
+{% block 'body' %}
+    <h2 id="title">Nueva Categoría</h2>
+    <form action="" method="POST"> {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Agregar</button>
+    </form>
+{% endblock %}

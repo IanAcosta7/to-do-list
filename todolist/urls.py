@@ -15,7 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.views.generic import RedirectView
+
+from user.views import LoginView, RegisterView, TaskView, CategoryListView, CategoryView, TaskDetailView
 
 urlpatterns = [
+    path('', RedirectView.as_view(url='login/')),
     path('admin/', admin.site.urls),
+    path('login/', LoginView.as_view()),
+    path('register/', RegisterView.as_view()),
+    path('dashboard/', CategoryListView.as_view()),
+    path('new_task/', TaskView.as_view()),
+    path('new_category/', CategoryView.as_view()),
+    path('task/<slug:pk>/', TaskDetailView.as_view()),
 ]

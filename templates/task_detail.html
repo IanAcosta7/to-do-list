@@ -1,0 +1,9 @@
+<!--<h2>{{ task.name }}</h2>
+<span>{{ task.category.name }}</span>
+<span>{{ task.state.name }}</span>-->
+
+<form action="" method="POST"> {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Guardar</button>
+    <button><a href="/dashboard/">Volver</a></button>
+</form>

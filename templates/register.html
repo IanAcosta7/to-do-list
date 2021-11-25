@@ -1,0 +1,10 @@
+{% extends 'index.html' %}
+
+{% block 'body' %}
+    <h2 id="title">Registrarse</h2>
+    <form action="" method="POST"> {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Registrarse</button>
+        ¿Ya estás Registrado? <a href="/login/">Inicia Sesión</a>.
+    </form>
+{% endblock %}
