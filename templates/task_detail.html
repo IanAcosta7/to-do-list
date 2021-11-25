@@ -1,9 +1,9 @@
-<!--<h2>{{ task.name }}</h2>
-<span>{{ task.category.name }}</span>
-<span>{{ task.state.name }}</span>-->
+{% extends 'index.html' %}
 
-<form action="" method="POST"> {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar</button>
-    <button><a href="/dashboard/">Volver</a></button>
-</form>
+{% block 'body' %}
+    <form action="" method="POST"> {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-outline-success" type="submit">Guardar</button>
+        <a class="btn btn-outline-success" href="/dashboard/">Volver</a>
+    </form>
+{% endblock %}
