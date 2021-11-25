@@ -14,10 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.views.generic import RedirectView
+from rest_framework import routers
 
-from user.views import LoginView, RegisterView, TaskView, CategoryListView, CategoryView, TaskDetailView
+from user.views import LoginView, RegisterView, TaskView, CategoryListView, CategoryView, TaskDetailView, TaskViewSet, \
+    UserViewSet, StateViewSet, CategoryViewSet
+
+router = routers.DefaultRouter()
+router.register(r'tasks', TaskViewSet)
+router.register(r'users', UserViewSet)
+router.register(r'states', StateViewSet)
+router.register(r'categories', CategoryViewSet)
 
 urlpatterns = [
     path('', RedirectView.as_view(url='login/')),
@@ -28,4 +36,6 @@ urlpatterns = [
     path('new_task/', TaskView.as_view()),
     path('new_category/', CategoryView.as_view()),
     path('task/<slug:pk>/', TaskDetailView.as_view()),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

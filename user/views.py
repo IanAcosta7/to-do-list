@@ -5,11 +5,13 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, ListView, DetailView
 from django.views.generic.edit import FormMixin
+from rest_framework import viewsets, permissions
 
 from user.forms import RegisterForm, LoginForm, TaskForm, CategoryForm, TaskDetailForm
 from django.contrib.auth.decorators import login_required
 
 from user.models import Task, Category, State
+from user.serializers import TaskSerializer, CategorySerializer, StateSerializer, UserSerializer
 
 
 @login_required
@@ -133,3 +135,27 @@ class CategoryListView(ListView):
         context['now'] = timezone.now()
         context['tasks'] = Task.objects.all()
         return context
+
+
+class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class StateViewSet(viewsets.ModelViewSet):
+    queryset = State.objects.all()
+    serializer_class = StateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [permissions.IsAuthenticated]
