@@ -1,23 +1,13 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, ListView, DetailView
 from django.views.generic.edit import FormMixin
 from rest_framework import viewsets, permissions
-
 from user.forms import RegisterForm, LoginForm, TaskForm, CategoryForm, TaskDetailForm
-from django.contrib.auth.decorators import login_required
-
 from user.models import Task, Category, State
 from user.serializers import TaskSerializer, CategorySerializer, StateSerializer, UserSerializer
-
-
-@login_required
-@csrf_exempt
-def dashboard_view(request):
-    return render(request, 'dashboard.html')
 
 
 class LoginView(FormView):
@@ -42,11 +32,15 @@ class LoginView(FormView):
             return self.form_invalid(form)
 
 
+def logout_view(request):
+    logout(request)
+    return redirect('/login/')
+
+
 class RegisterView(FormView):
     template_name = 'register.html'
     success_url = '/login/'
     form_class = RegisterForm
-
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -73,15 +67,6 @@ class TaskView(FormView):
         else:
             return self.form_invalid(form)
 
-
-#class TaskDetailView(DetailView):
- #   template_name = 'task_detail.html'
-  #  model = Task
-#
- #   def get_context_data(self, **kwargs):
-  #      context = super().get_context_data(**kwargs)
-   #     context['now'] = timezone.now()
-    #    return context
 
 class TaskDetailView(FormMixin, DetailView):
     template_name = 'task_detail.html'
@@ -133,7 +118,7 @@ class CategoryListView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['now'] = timezone.now()
-        context['tasks'] = Task.objects.all()
+        context['tasks'] = Task.objects.all().filter(user_id=self.request.user.id)
         return context
 
 
@@ -159,3 +144,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+def delete_task(request, id):
+    Task.objects.filter(id=id).delete()
+    return redirect('/dashboard/')

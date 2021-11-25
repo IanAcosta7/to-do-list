@@ -14,12 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.urls import path, include
 from django.views.generic import RedirectView
 from rest_framework import routers
 
 from user.views import LoginView, RegisterView, TaskView, CategoryListView, CategoryView, TaskDetailView, TaskViewSet, \
-    UserViewSet, StateViewSet, CategoryViewSet
+    UserViewSet, StateViewSet, CategoryViewSet, logout_view, delete_task
 
 router = routers.DefaultRouter()
 router.register(r'tasks', TaskViewSet)
@@ -31,11 +32,13 @@ urlpatterns = [
     path('', RedirectView.as_view(url='login/')),
     path('admin/', admin.site.urls),
     path('login/', LoginView.as_view()),
+    path('logout/', logout_view),
     path('register/', RegisterView.as_view()),
-    path('dashboard/', CategoryListView.as_view()),
-    path('new_task/', TaskView.as_view()),
-    path('new_category/', CategoryView.as_view()),
-    path('task/<slug:pk>/', TaskDetailView.as_view()),
+    path('dashboard/', login_required(CategoryListView.as_view())),
+    path('new_task/', login_required(TaskView.as_view())),
+    path('new_category/', login_required(CategoryView.as_view())),
+    path('task/<slug:pk>/', login_required(TaskDetailView.as_view())),
+    path('task/delete/<int:id>/', login_required(delete_task)),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

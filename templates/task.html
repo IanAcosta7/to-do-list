@@ -4,6 +4,6 @@
     <h2 id="title">Nueva Tarea</h2>
     <form action="" method="POST"> {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Agregar</button>
+        <button class="btn btn-outline-success" type="submit">Agregar</button>
     </form>
 {% endblock %}
