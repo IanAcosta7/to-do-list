@@ -6,18 +6,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, ListView, DetailView
 from django.views.generic.edit import FormMixin
 from rest_framework import viewsets, permissions
-
 from user.forms import RegisterForm, LoginForm, TaskForm, CategoryForm, TaskDetailForm
-from django.contrib.auth.decorators import login_required
-
 from user.models import Task, Category, State
 from user.serializers import TaskSerializer, CategorySerializer, StateSerializer, UserSerializer
-
-
-@login_required
-@csrf_exempt
-def dashboard_view(request):
-    return render(request, 'dashboard.html')
 
 
 class LoginView(FormView):
@@ -73,15 +64,6 @@ class TaskView(FormView):
         else:
             return self.form_invalid(form)
 
-
-#class TaskDetailView(DetailView):
- #   template_name = 'task_detail.html'
-  #  model = Task
-#
- #   def get_context_data(self, **kwargs):
-  #      context = super().get_context_data(**kwargs)
-   #     context['now'] = timezone.now()
-    #    return context
 
 class TaskDetailView(FormMixin, DetailView):
     template_name = 'task_detail.html'
